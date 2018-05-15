@@ -1,5 +1,4 @@
 var autoprefixer       = require('gulp-autoprefixer');
-var beeper             = require('beeper');
 var browserSync        = require('browser-sync');
 var cache              = require('gulp-cache');
 var cleanCSS           = require('gulp-clean-css');
@@ -14,22 +13,19 @@ var rename             = require("gulp-rename");
 var sass               = require('gulp-sass');
 var sourcemaps         = require('gulp-sourcemaps');
 var uglify             = require('gulp-uglify');
-// sudo npm install gulp-uglify browser-sync gulp-plumber gulp-autoprefixer gulp-sass gulp-pug gulp-imagemin gulp-cache gulp-clean-css gulp-sourcemaps gulp-concat beeper gulp-util gulp-rename gulp-notify --save-dev
+// sudo npm install gulp-uglify browser-sync gulp-plumber gulp-autoprefixer gulp-sass gulp-pug gulp-imagemin gulp-cache gulp-clean-css gulp-sourcemaps gulp-concat gulp-util gulp-rename gulp-notify --save-dev
 var jsVendorFiles      = [];             // Holds the js vendor files to be concatenated
-var myJsFiles          = ['js/*.js'];    // Holds the js files to be concatenated
+var myCssFiles         = ['assets/styles/*.scss'];    // Holds the js files to be concatenated
+var myJsFiles          = ['assets/js/*.js'];    // Holds the js files to be concatenated
+var myImgFiles         = ['assets/img/**/*'];    // Holds the js files to be concatenated
+var myPugFiles         = ['assets/*.pug'];    // Holds the js files to be concatenated
 var fs                 = require('fs');  // ExistsSync var to check if font directory patch exist
 var bowerDirectory     = getBowerDirectory();
-var bootstrapJSPath    = bowerDirectory + "bootstrap/dist/js/bootstrap.min.js";
-var bootstrapCSSPath   = bowerDirectory + "bootstrap/dist/css/bootstrap.min.css";
-var bootstrapFontsPath = bowerDirectory + "bootstrap/dist/fonts/**.*";
-var jqueryPath         = bowerDirectory + "jquery/dist/jquery.min.js";
-var bootstrapExist     = false;
 var onError            = function(err) { // Custom error msg with beep sound and text color
     notify.onError({
       title:    "Gulp error in " + err.plugin,
       message:  err.toString()
     })(err);
-    beeper(3);
     this.emit('end');
     gutil.log(gutil.colors.red(err));
 };
@@ -46,35 +42,6 @@ function getBowerDirectory() {
   }
 }
 
-function setupJquery(data) {
-  var jqueryCDN = '    script(src="https://code.jquery.com/jquery-{{JQUERY_VERSION}}.min.js" integrity="{{JQUERY_SRI_HASH}}" crossorigin="anonymous")';
-  var jqueryLocalFallback = "    <script>window.jQuery || document.write(" + "'<script src=" + '"js/vendor/jquery/dist/jquery/jquery.min.js"' + "><\\/script>')</script>";
-  gulp.src(jqueryPath)
-  .pipe(gulp.dest('./build/js/vendor/jquery/dist/jquery'));
-  data.splice(data.length, 0, jqueryCDN);
-  data.splice(data.length, 0, jqueryLocalFallback);
-}
-
-function setupBootstrap(data) {
-  bootstrapExist = true;
-  setupJquery(data);
-  var bootstrapCSSCDN = '    link(href="https://maxcdn.bootstrapcdn.com/bootstrap/{{BOOTSTRAP_VERSION}}/css/bootstrap.min.css", rel="stylesheet", integrity="{{BOOTSTRAP_SRI_HASH}}", crossorigin="anonymous")';
-  var bootstrapCSSLocalFallback = '    div(id="bootstrapCssTest" class="hidden")\n' + "    <script>$(function(){if ($('#bootstrapCssTest').is(':visible')){$('head').prepend('<link rel=" + '"stylesheet" href="/js/vendor/bootstrap/dist/css/bootstrap.min.css">' + "');}});</script>";
-  var bootstrapJSCDN = '    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/{{BOOTSTRAP_VERSION}}/js/bootstrap.min.js", integrity="{{BOOTSTRAP_SRI_HASH}}", crossorigin="anonymous")';
-  var bootstrapJSLocalFallback = "    <script>if(typeof($.fn.modal) === 'undefined'" + ") {document.write('<script src=" + '"/js/vendor/bootstrap/dist/js/bootstrap.min.js"' + "><\\/script>')}</script>";
-  gulp.src(bootstrapFontsPath)
-  .pipe(gulp.dest('./build/js/vendor/bootstrap/dist/fonts'));
-  gulp.src(bootstrapJSPath)
-  .pipe(gulp.dest('./build/js/vendor/bootstrap/dist/js'));
-  gulp.src(bootstrapCSSPath)
-  .pipe(gulp.dest('./build/js/vendor/bootstrap/dist/css'));
-
-  data.splice(8, 0, bootstrapCSSCDN);
-  data.splice(data.length, 0, bootstrapJSCDN);
-  data.splice(data.length, 0, bootstrapJSLocalFallback);
-  data.splice(data.length, 0, bootstrapCSSLocalFallback);
-}
-
 function findKeyText(data, txt) {
   for (var i = 0; i < data.length; i++) {
     if(data[i].indexOf(txt) > -1) {
@@ -85,10 +52,10 @@ function findKeyText(data, txt) {
 }
 
 gulp.task('styles', function() {
-  gulp.src('styles/*.scss')
+  gulp.src(myCssFiles)
   .pipe(plumber({ errorHandler: onError }))
   .pipe(sourcemaps.init())
-  .pipe(sass({indentedSyntax: true}))
+  .pipe(sass({indentedSyntax: false}))
   .pipe(autoprefixer({
     browsers: ['last 5 versions'],
     cascade: false}))
@@ -117,7 +84,7 @@ gulp.task('scripts', function() {
 });
 
 gulp.task('images', function() {
-  gulp.src('img/**/*')
+  gulp.src(myImgFiles)
   .pipe(cache(imagemin({
     optimizationLevel: 3,
     progressive: true,
@@ -134,16 +101,6 @@ gulp.task('setup-src', function() {
 
   if(data[data.length - 1].indexOf('script(src="js/bundle.min.js")') > -1) {
     data.pop();
-  }
-
-  if(bowerDirectory) {
-    if(fs.existsSync(bootstrapJSPath) && !findKeyText(data, 'bootstrap.min.css')) {
-      setupBootstrap(data);
-    }
-
-    if(fs.existsSync(jqueryPath) && !bootstrapExist  && !findKeyText(data, 'jquery.min.js')) {
-      setupJquery(data);
-    }
   }
 
   if(!findKeyText(data, 'bundle.min.js')) {
@@ -165,10 +122,10 @@ gulp.task('setup', function() {
 });
 
 gulp.task('watch', function() {
-  gulp.watch('styles/**/*',                        ['styles']);
-  gulp.watch(['templates/**/*', './*.pug'],        ['templates']);
-  gulp.watch('js/*.js',                            ['scripts']);
-  gulp.watch('img/**/*',                           ['images']);
+  gulp.watch(myCssFiles,                        ['styles']);
+  gulp.watch(['assets/templates/**/*', './*.pug'],        ['templates']);
+  gulp.watch(myJsFiles,                            ['scripts']);
+  gulp.watch(myImgFiles,                           ['images']);
 
 // init server
   browserSync.init({
