@@ -12,6 +12,7 @@ var rename          = require("gulp-rename");
 var sass            = require('gulp-sass');
 var sourcemaps      = require('gulp-sourcemaps');
 var uglify          = require('gulp-uglify');
+var plumber         = require('gulp-plumber');
 
 // My files
 var src             = 'src/';
@@ -38,6 +39,7 @@ function findKeyText(data, txt) {
 
 gulp.task('styles', function() {
   gulp.src(CSSFiles)
+  .pipe(plumber())
   .pipe(sourcemaps.init())
   .pipe(sass({indentedSyntax: false}))
   .pipe(autoprefixer({
@@ -51,12 +53,14 @@ gulp.task('styles', function() {
 
 gulp.task('templates', function() {
   gulp.src(HTMLFiles)
+  .pipe(plumber())
   .pipe(pug())
   .pipe(gulp.dest('build/'));
 });
 
 gulp.task('scripts', function() {
   return gulp.src(VendorFiles.concat(JSFiles))
+  .pipe(plumber())
   .pipe(sourcemaps.init())
   .pipe(gconcat('bundle.js'))
   .pipe(uglify())
