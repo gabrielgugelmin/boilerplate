@@ -1,0 +1,31 @@
+//
+// Z-index depth mapping
+//
+// Reference:
+// @link https://www.sitepoint.com/better-solution-managing-z-index-sass/
+//
+// Default Settings (stored in _variables.scss file)
+// $z-depth: (
+//   "default":  1,
+//   "absolute": 100,
+//   "fixed":    200,
+//   "overlay":  300,
+//   "modal":    400,
+// );
+//
+// Lint options:
+// sass-lint:disable no-warn
+
+// z-depth map function
+// @param  {String}  $layer  A valid $z-depth layer key
+// @return {Number}          The $z-depth layer's value
+@function z($layer) {
+
+  // Return warning message if layer passed not exists
+  @if not map-has-key($z-depth, $layer) {
+    @warn "No layer found for `#{$layer}` in $z-depth map. Property omitted.";
+  }
+
+  // return the layer's depth value
+  @return map-get($z-depth, $layer);
+}

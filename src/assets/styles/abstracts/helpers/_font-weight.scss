@@ -1,0 +1,21 @@
+// Font Weight map function
+// Use:
+// font-weight: fw("regular");
+//
+// @param  {String}  $weight  A valid weight key
+// @return {Number}           The font weight's value
+@function fw($weight) {
+
+  // Sets to default if no layer passed
+  @if ($z-depth, $weight) {
+    @return map-get($font-weight, $weight);
+  }
+
+  // Return warning message if weight passed not exists
+  @if not map-has-key($font-weight, $weight) {
+    @warn "No weight found for `#{$weight}` in $font-weight map. Property omitted.";
+  }
+
+  // return the weight's depth value
+  @return map-get($font-weight, $weight);
+}

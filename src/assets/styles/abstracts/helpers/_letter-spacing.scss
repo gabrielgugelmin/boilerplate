@@ -1,0 +1,9 @@
+// Photoshop to CSS letter-spacing function
+//
+// Reference:
+// @link https://codepen.io/alyda/pen/gGzbL
+// @link https://coderwall.com/p/f332wg/convert-photoshop-letter-spacing-to-css-letter-spacing
+
+@function ls($letter-spacing, $font-size) {
+  @return ( $letter-spacing * $font-size / 1000 ) * 1px
+}

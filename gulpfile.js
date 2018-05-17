@@ -1,46 +1,31 @@
-var autoprefixer       = require('gulp-autoprefixer');
-var browserSync        = require('browser-sync');
-var cache              = require('gulp-cache');
-var cleanCSS           = require('gulp-clean-css');
-var gconcat            = require('gulp-concat');
-var gulp               = require('gulp');
-var gutil              = require('gulp-util');
-var imagemin           = require('gulp-imagemin');
-var notify             = require('gulp-notify');
-var plumber            = require('gulp-plumber');
-var pug                = require('gulp-pug');
-var rename             = require("gulp-rename");
-var sass               = require('gulp-sass');
-var sourcemaps         = require('gulp-sourcemaps');
-var uglify             = require('gulp-uglify');
-// sudo npm install gulp-uglify browser-sync gulp-plumber gulp-autoprefixer gulp-sass gulp-pug gulp-imagemin gulp-cache gulp-clean-css gulp-sourcemaps gulp-concat gulp-util gulp-rename gulp-notify --save-dev
-var jsVendorFiles      = [];             // Holds the js vendor files to be concatenated
-var myCssFiles         = ['assets/styles/*.scss'];    // Holds the js files to be concatenated
-var myJsFiles          = ['assets/js/*.js'];    // Holds the js files to be concatenated
-var myImgFiles         = ['assets/img/**/*'];    // Holds the js files to be concatenated
-var myPugFiles         = ['assets/*.pug'];    // Holds the js files to be concatenated
-var fs                 = require('fs');  // ExistsSync var to check if font directory patch exist
-var bowerDirectory     = getBowerDirectory();
-var onError            = function(err) { // Custom error msg with beep sound and text color
-    notify.onError({
-      title:    "Gulp error in " + err.plugin,
-      message:  err.toString()
-    })(err);
-    this.emit('end');
-    gutil.log(gutil.colors.red(err));
-};
+var autoprefixer    = require('gulp-autoprefixer');
+var browserSync     = require('browser-sync');
+var cache           = require('gulp-cache');
+var cleanCSS        = require('gulp-clean-css');
+var gconcat         = require('gulp-concat');
+var gulp            = require('gulp');
+var gutil           = require('gulp-util');
+var imagemin        = require('gulp-imagemin');
+var notify          = require('gulp-notify');
+var pug             = require('gulp-pug');
+var rename          = require("gulp-rename");
+var sass            = require('gulp-sass');
+var sourcemaps      = require('gulp-sourcemaps');
+var uglify          = require('gulp-uglify');
 
-function getBowerDirectory() {
-  var bowerComponents = "./bower_components";
-  if(fs.existsSync('.bowerrc')) {
-    var bowerrc = JSON.parse(fs.readFileSync('.bowerrc').toString());
-    return bowerrc.directory;
-  } else if (fs.existsSync(bowerComponents)) {
-    return bowerComponents + '/';
-  } else {
-    return '';
-  }
-}
+// My files
+var src             = 'src/';
+var srcAssets       = src + 'assets/';
+
+var VendorFiles     = [srcAssets + 'js/vendors/mustache.min.js', srcAssets + 'js/vendors/he.js'];
+var CSSFiles        = [srcAssets + 'styles/**/*.scss'];
+var JSFiles         = [srcAssets + 'js/*.js'];
+var IMGFiles        = [srcAssets + 'img/**/*'];
+var JSONFiles       = [srcAssets + 'json/*.json'];
+var HTMLFiles       = [src + '*.pug'];
+
+var fs              = require('fs');
+
 
 function findKeyText(data, txt) {
   for (var i = 0; i < data.length; i++) {
@@ -52,8 +37,7 @@ function findKeyText(data, txt) {
 }
 
 gulp.task('styles', function() {
-  gulp.src(myCssFiles)
-  .pipe(plumber({ errorHandler: onError }))
+  gulp.src(CSSFiles)
   .pipe(sourcemaps.init())
   .pipe(sass({indentedSyntax: false}))
   .pipe(autoprefixer({
@@ -62,38 +46,41 @@ gulp.task('styles', function() {
   .pipe(cleanCSS())
   .pipe(sourcemaps.write())
   .pipe(rename({ suffix: '.min'}))
-  .pipe(gulp.dest('build/css'));
+  .pipe(gulp.dest('build/assets/css'));
 });
 
 gulp.task('templates', function() {
-  gulp.src('./*.pug')
-  .pipe(plumber({ errorHandler: onError }))
+  gulp.src(HTMLFiles)
   .pipe(pug())
   .pipe(gulp.dest('build/'));
 });
 
 gulp.task('scripts', function() {
-  return gulp.src(myJsFiles.concat(jsVendorFiles))
-  .pipe(plumber({ errorHandler: onError }))
+  return gulp.src(VendorFiles.concat(JSFiles))
   .pipe(sourcemaps.init())
   .pipe(gconcat('bundle.js'))
   .pipe(uglify())
   .pipe(sourcemaps.write())
   .pipe(rename({ suffix: '.min'}))
-  .pipe(gulp.dest('build/js'));
+  .pipe(gulp.dest('build/assets/js'));
 });
 
 gulp.task('images', function() {
-  gulp.src(myImgFiles)
+  gulp.src(IMGFiles)
   .pipe(cache(imagemin({
     optimizationLevel: 3,
     progressive: true,
     interlaced: true})))
-  .pipe(gulp.dest('build/img/'));
+  .pipe(gulp.dest('build/assets/img/'));
+});
+
+gulp.task('json', function() {
+  gulp.src(JSONFiles)
+  .pipe(gulp.dest('build/assets/json/'));
 });
 
 gulp.task('setup-src', function() {
-  var data = fs.readFileSync('./index.pug').toString().split("\n");
+  var data = fs.readFileSync(src + 'index.pug').toString().split("\n");
 
   if(data[data.length - 1] === '') {
     data.pop();
@@ -108,30 +95,34 @@ gulp.task('setup-src', function() {
   }
 
   var text = data.join("\n");
-  fs.writeFile('./index.pug', text, function (err) {
+  fs.writeFile(src + 'index.html', text, function (err) {
     if (err) throw err;
   });
 });
 
 gulp.task('default', function() {
   console.log("Use 'gulp setup' command to initialize the project files");
+  gulp.start('setup');
+  gulp.start('watch');
 });
 
 gulp.task('setup', function() {
-  gulp.start('styles', 'templates', 'scripts', 'images', 'setup-src');
+  gulp.start('styles', 'templates', 'scripts', 'images', 'json', 'setup-src');
 });
 
 gulp.task('watch', function() {
-  gulp.watch(myCssFiles,                        ['styles']);
-  gulp.watch(['assets/templates/**/*', './*.pug'],        ['templates']);
-  gulp.watch(myJsFiles,                            ['scripts']);
-  gulp.watch(myImgFiles,                           ['images']);
+  gulp.watch(CSSFiles,  ['styles']);
+  gulp.watch(HTMLFiles, ['templates']);
+  gulp.watch(JSFiles,   ['scripts']);
+  gulp.watch(IMGFiles,  ['images']);
 
 // init server
   browserSync.init({
     server: {
       proxy: "local.build",
-      baseDir: "build/"
+      baseDir: "./build",
+      startPath: './index.html',
+      directory: true
     }
   });
 
