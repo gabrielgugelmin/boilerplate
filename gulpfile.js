@@ -4,9 +4,7 @@ var cache           = require('gulp-cache');
 var cleanCSS        = require('gulp-clean-css');
 var gconcat         = require('gulp-concat');
 var gulp            = require('gulp');
-var gutil           = require('gulp-util');
 var imagemin        = require('gulp-imagemin');
-var notify          = require('gulp-notify');
 var pug             = require('gulp-pug');
 var rename          = require("gulp-rename");
 var sass            = require('gulp-sass');
@@ -18,7 +16,7 @@ var plumber         = require('gulp-plumber');
 var src             = 'src/';
 var srcAssets       = src + 'assets/';
 
-var VendorFiles     = [srcAssets + 'js/vendors/mustache.min.js', srcAssets + 'js/vendors/he.js'];
+var VendorFiles     = [srcAssets + 'js/vendors/*.js'];
 var CSSFiles        = [srcAssets + 'styles/**/*.scss'];
 var JSFiles         = [srcAssets + 'js/*.js'];
 var IMGFiles        = [srcAssets + 'img/**/*'];
@@ -99,7 +97,7 @@ gulp.task('setup-src', function() {
   }
 
   var text = data.join("\n");
-  fs.writeFile(src + 'index.html', text, function (err) {
+  fs.writeFile('build/index.html', text, function (err) {
     if (err) throw err;
   });
 });
