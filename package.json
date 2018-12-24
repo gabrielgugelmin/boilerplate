@@ -1,5 +1,5 @@
 {
-  "name": "bcredi",
+  "name": "brokers",
   "version": "1.0.0",
   "description": "<a><img src=\"http://res.cloudinary.com/dt4qeehms/image/upload/v1494509335/logo_njvnrz.png\" height=\"300\" align=\"right\"></a>",
   "main": "gulpfile.js",
@@ -17,9 +17,12 @@
   },
   "homepage": "https://github.com/Errec/pug-sass-boilerplate-starter-kit#readme",
   "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.3",
     "browser-sync": "^2.24.4",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^5.0.0",
+    "gulp-babel": "^8.0.0",
     "gulp-cache": "^1.0.2",
     "gulp-clean-css": "^3.9.4",
     "gulp-concat": "^2.6.1",

@@ -2,7 +2,7 @@ var autoprefixer    = require('gulp-autoprefixer');
 var browserSync     = require('browser-sync');
 var cache           = require('gulp-cache');
 var cleanCSS        = require('gulp-clean-css');
-var gconcat         = require('gulp-concat');
+var concat         = require('gulp-concat');
 var gulp            = require('gulp');
 var imagemin        = require('gulp-imagemin');
 var pug             = require('gulp-pug');
@@ -11,6 +11,8 @@ var sass            = require('gulp-sass');
 var sourcemaps      = require('gulp-sourcemaps');
 var uglify          = require('gulp-uglify');
 var plumber         = require('gulp-plumber');
+var sourcemaps      = require("gulp-sourcemaps");
+var babel           = require("gulp-babel");
 
 // My files
 var src             = 'src/';
@@ -39,7 +41,7 @@ gulp.task('styles', function() {
   gulp.src(CSSFiles)
   .pipe(plumber())
   .pipe(sourcemaps.init())
-  .pipe(sass({indentedSyntax: false}))
+  .pipe(sass())
   .pipe(autoprefixer({
     browsers: ['last 5 versions'],
     cascade: false}))
@@ -58,13 +60,14 @@ gulp.task('templates', function() {
 
 gulp.task('scripts', function() {
   return gulp.src(VendorFiles.concat(JSFiles))
-  .pipe(plumber())
-  .pipe(sourcemaps.init())
-  .pipe(gconcat('bundle.js'))
-  .pipe(uglify())
-  .pipe(sourcemaps.write())
-  .pipe(rename({ suffix: '.min'}))
-  .pipe(gulp.dest('build/assets/js'));
+    .pipe(plumber())
+    .pipe(sourcemaps.init())
+    .pipe(babel())
+    .pipe(concat("bundle.js"))
+    // .pipe(uglify())
+    .pipe(sourcemaps.write("."))
+    .pipe(rename({ suffix: '.min'}))
+    .pipe(gulp.dest("build/assets/js"));
 });
 
 gulp.task('images', function() {
@@ -82,7 +85,7 @@ gulp.task('json', function() {
 });
 
 gulp.task('setup-src', function() {
-  var data = fs.readFileSync(src + 'index.pug').toString().split("\n");
+  var data = fs.readFileSync(src + '*.pug').toString().split("\n");
 
   if(data[data.length - 1] === '') {
     data.pop();
@@ -97,7 +100,7 @@ gulp.task('setup-src', function() {
   }
 
   var text = data.join("\n");
-  fs.writeFile('build/index.html', text, function (err) {
+  fs.writeFile('build/*.html', text, function (err) {
     if (err) throw err;
   });
 });
@@ -123,7 +126,7 @@ gulp.task('watch', function() {
     server: {
       proxy: "local.build",
       baseDir: "./build",
-      startPath: './index.html',
+      startPath: './*.html',
       directory: true
     }
   });
