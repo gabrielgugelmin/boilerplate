@@ -23,7 +23,7 @@ var CSSFiles        = [srcAssets + 'styles/**/*.scss'];
 var JSFiles         = [srcAssets + 'js/*.js'];
 var IMGFiles        = [srcAssets + 'img/**/*'];
 var JSONFiles       = [srcAssets + 'json/*.json'];
-var HTMLFiles       = [src + '*.pug'];
+var HTMLFiles       = [src + '*.html'];
 
 var fs              = require('fs');
 
@@ -54,7 +54,7 @@ gulp.task('styles', function() {
 gulp.task('templates', function() {
   gulp.src(HTMLFiles)
   .pipe(plumber())
-  .pipe(pug())
+  // .pipe(pug())
   .pipe(gulp.dest('build/'));
 });
 
@@ -64,7 +64,7 @@ gulp.task('scripts', function() {
     .pipe(sourcemaps.init())
     .pipe(babel())
     .pipe(concat("bundle.js"))
-    // .pipe(uglify())
+    .pipe(uglify())
     .pipe(sourcemaps.write("."))
     .pipe(rename({ suffix: '.min'}))
     .pipe(gulp.dest("build/assets/js"));
@@ -85,7 +85,7 @@ gulp.task('json', function() {
 });
 
 gulp.task('setup-src', function() {
-  var data = fs.readFileSync(src + '*.pug').toString().split("\n");
+  var data = fs.readFileSync(src + 'index.html').toString().split("\n");
 
   if(data[data.length - 1] === '') {
     data.pop();
@@ -100,7 +100,7 @@ gulp.task('setup-src', function() {
   }
 
   var text = data.join("\n");
-  fs.writeFile('build/*.html', text, function (err) {
+  fs.writeFile('build/index.html', text, function (err) {
     if (err) throw err;
   });
 });
@@ -126,7 +126,7 @@ gulp.task('watch', function() {
     server: {
       proxy: "local.build",
       baseDir: "./build",
-      startPath: './*.html',
+      startPath: './index.html',
       directory: true
     }
   });

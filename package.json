@@ -1,24 +1,23 @@
 {
-  "name": "brokers",
+  "name": "boilerplate",
   "version": "1.0.0",
-  "description": "<a><img src=\"http://res.cloudinary.com/dt4qeehms/image/upload/v1494509335/logo_njvnrz.png\" height=\"300\" align=\"right\"></a>",
   "main": "gulpfile.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Errec/pug-sass-boilerplate-starter-kit.git"
+    "url": "git+https://github.com/gabrielgugelmin/boilerplate.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Errec/pug-sass-boilerplate-starter-kit/issues"
+    "url": "https://github.com/gabrielgugelmin/boilerplate.git/issues"
   },
-  "homepage": "https://github.com/Errec/pug-sass-boilerplate-starter-kit#readme",
+  "homepage": "https://github.com/gabrielgugelmin/boilerplate.git#readme",
   "devDependencies": {
-    "@babel/core": "^7.2.2",
-    "@babel/preset-env": "^7.2.3",
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6",
     "browser-sync": "^2.24.4",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^5.0.0",
