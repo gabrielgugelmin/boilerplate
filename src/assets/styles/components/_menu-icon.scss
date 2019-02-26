@@ -1,0 +1,81 @@
+.menu-icon {
+  background: transparent;
+  border-radius: 2px;
+  border: none;
+  display: inline-block;
+  height: 40px;
+  left: 0;
+  padding: 0 14px;
+  position: absolute;
+  text-decoration: none;
+  transition: .3s ease;
+  top: 20px;
+  width: 60px;
+
+  @include media(">=desktop") {
+    display: none;
+  }
+
+  span {
+    background-color: color(mono, white);
+    border-radius: 2px;
+    display: block;
+    height: 1px;
+    margin: 0 auto;
+    position: relative;
+    width: 100%;
+
+    &::after,
+    &::before {
+      background-color: color(mono, white);
+      content: "";
+      display: block;
+      height: 100%;
+      position: absolute;
+      transform: rotate(0);
+      transition: all .15s linear;
+      width: 100%;
+    }
+
+    &::after {
+      bottom: -10px;
+    }
+
+    &::before {
+      top: -10px;
+    }
+
+    @include media(">=desktop") {
+      width: 32px;
+
+      &::after {
+        bottom: -9px;
+      }
+
+      &::before {
+        top: -9px;
+      }
+    }
+  }
+
+  &--open {
+    span {
+      background-color: transparent;
+
+      &::before,
+      &::after {
+        background-color: color(yellow, buttercup);
+      }
+
+      &:before {
+        top: 0;
+        transform: rotate(45deg);
+      }
+
+      &:after {
+        bottom: 0;
+        transform: rotate(-45deg);
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+/*
+* Better function for color palettes using Sass maps
+* Link: http://erskinedesign.com/blog/friendlier-colour-names-sass-maps/
+* Usage: color: color(brand,tan);
+*/
+
+$palletes: ();
+@function color($palette, $tone: 'base') {
+    @return map-get( map-get($palettes, $palette), $tone );
+}

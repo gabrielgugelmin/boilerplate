@@ -1,0 +1,28 @@
+.banner {
+  position: relative;
+  &__item {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 415px;
+  }
+
+  &__img {}
+
+  &__title {}
+
+  &__shape {
+    position: absolute;
+    bottom: 0;
+    height: 42px;
+    width: 100%;
+    z-index: 1;
+
+    svg {
+      bottom: 0;
+      height: 100%;
+      position: absolute;
+      width: 100%;
+    }
+  }
+}

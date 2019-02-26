@@ -1,1 +1,23 @@
 
+// https://www.oomphinc.com/notes/2015/12/easy-color-organization-with-sass/
+
+$palettes: (
+  mono: (
+    black:    #252525,
+    white:    #FFFFFF,
+  ),
+  yellow: (
+    buttercup: #F1A71E,
+    pizza: #D08E13,
+  ),
+  gray: (
+    boulder: #797979,
+    gallery: #EBEBEB,
+  ),
+  brown: (
+    old-copper: #6C462B,
+  ),
+  purple: (
+    purple-heart: #8816CD,
+  )
+);

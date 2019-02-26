@@ -1,0 +1,22 @@
+.header {
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: z("fixed");
+
+  &__logo {
+    display: none;
+
+    @include media(">=desktop") {
+      display: inline-block;
+      position: absolute;
+      width: 120px;
+
+      img {
+        width: 100%;
+      }
+    }
+  }
+
+}

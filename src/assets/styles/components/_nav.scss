@@ -1,0 +1,50 @@
+.nav {
+  background-color: color(mono, white);
+  box-shadow: 0 3px 5px 3px rgba(color(mono, black), .2);;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  left: -100%;
+  max-width: 400px;
+  opacity: 0;
+  padding: 30px 20px;
+  position: fixed;
+  top: 0;
+  transition: all .3s ease-in-out;
+  visibility: hidden;
+  width: 80%;
+
+  @include media(">=desktop") {
+    background-color: transparent;
+    box-shadow: none;
+    height: auto;
+    left: 0;
+    max-width: 100%;
+    opacity: 1;
+    padding: 0;
+    position: relative;
+    visibility: visible;
+    width: 100%;
+  }
+
+  &__logo {
+    width: 100px;
+    margin: 0 auto;
+
+    path {
+      fill: color(mono, white);
+    }
+  }
+
+  &__logo {
+    @include media(">=desktop") {
+      display: none;
+    }
+  }
+
+  &--open {
+    left: 0;
+    opacity: 1;
+    visibility: visible;
+  }
+}
