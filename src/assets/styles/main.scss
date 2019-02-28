@@ -13,15 +13,25 @@ html, body {
 
 .page {
   background-color: color(gray, boulder);
-  height: 100%;
 
   &__container {
     @extend .container;
     padding: 0;
+    position: relative;
+
+    @include media("<desktop") {
+      max-width: 100%;
+    }
 
     @include media(">=desktop") {
       padding-left: 15px;
       padding-right: 15px;
     }
+  }
+}
+
+.diferencial {
+  @include media(">=desktop") {
+    background: right center / auto no-repeat url("../img/quem-somos.jpg") color(gray, gallery);
   }
 }

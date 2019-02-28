@@ -15,11 +15,11 @@ $(function () {
 	// menu fixo ao scrollar
   $(window).scroll(function() {
     if ($(this).scrollTop() >= 30) {
-      $('.nav').addClass('nav--scrolling');
-      $('.nav__logo .logo').removeClass('logo--white');
+      $('.header').addClass('header--scrolling');
+      $('.header__logo .logo').removeClass('logo--white');
     } else{
-    	$('.nav').removeClass('nav--scrolling');
-    	$('.nav__logo .logo').addClass('logo--white');
+    	$('.header').removeClass('header--scrolling');
+    	$('.header__logo .logo').addClass('logo--white');
     }
   });
 

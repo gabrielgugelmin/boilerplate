@@ -7,10 +7,14 @@
     background-repeat: no-repeat;
     background-size: cover;
     display: flex !important;
-    height: 415px;
+    height: 490px;
     justify-content: center;
     text-align: center;
     padding: 30px;
+
+    @include media(">=tablet") {
+      height: 415px;
+    }
   }
 
   &__img {
