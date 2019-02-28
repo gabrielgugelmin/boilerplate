@@ -1,5 +1,5 @@
 .nav {
-  background-color: color(mono, white);
+  background-color: color(yellow, pizza);
   box-shadow: 0 3px 5px 3px rgba(color(mono, black), .2);;
   display: flex;
   flex-direction: column;
@@ -28,12 +28,9 @@
   }
 
   &__logo {
-    width: 100px;
+    display: block;
     margin: 0 auto;
-
-    path {
-      fill: color(mono, white);
-    }
+    width: 200px;
   }
 
   &__logo {
@@ -46,5 +43,10 @@
     left: 0;
     opacity: 1;
     visibility: visible;
+  }
+
+  .menu-icon {
+    left: auto;
+    right: 0;
   }
 }

@@ -1,0 +1,15 @@
+.button {
+  background-color: color(yellow, pizza);
+  border-radius: 30px;
+  border: 2px solid color(mono, white);
+  color: color(mono, white);
+  display: inline-block;
+  font-family: $font-title;
+  font-size: 14px;
+  font-weight: fw("semibold");
+  padding: 8px 30px;
+
+  @include media(">=desktop") {
+    font-size: 18px;
+  }
+}

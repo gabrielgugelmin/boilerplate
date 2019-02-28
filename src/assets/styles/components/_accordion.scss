@@ -1,0 +1,52 @@
+.accordion {
+  background-color: color(gray, concrete);
+  border: 1px solid color(brown, old-copper);
+  border-radius: 5px;
+
+	&__item {
+		border-bottom: 5px;
+    position: relative;
+    border-bottom: 1px solid color(brown, old-copper);
+
+    &:last-child {
+      border-bottom: 0;
+    }
+
+		.accordion__content {
+			display: none;
+    }
+  }
+
+	&__trigger {
+		font-size: 16px;
+		font-weight: fw("semibold");
+		user-select: none;
+    color: color(brown, old-copper);
+    cursor: pointer;
+    display: block;
+    font-family: $font-title;
+    padding: 15px;
+    width: 100%;
+
+    @include media(">=desktop") {
+      font-size: 20px;
+    }
+  }
+
+  &__content {
+    padding: 10px 25px 25px;
+  }
+
+	p {
+    color: color(brown, old-copper);
+    font-family: $font-text;
+    font-size: 16px;
+    font-weight: fw("light");
+    line-height: 1.5;
+    margin-bottom: 15px;
+
+    &:only-child {
+      margin-bottom: 0;
+    }
+  }
+}

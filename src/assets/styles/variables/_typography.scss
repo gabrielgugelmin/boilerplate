@@ -1,8 +1,14 @@
-$titillium: 'Titillium Web', sans-serif;
+$dosis: 'Dosis', sans-serif;
+$roboto: 'Roboto', sans-serif;
+$kg: 'KG Eyes Wide Open', sans-serif;
 
 $font-weight: (
   'light':      300,
   'regular':    400,
+  'medium':     500,
   'semibold':   600,
   'bold':       700,
 ) !default;
+
+$font-text: $dosis;
+$font-title: $roboto;

@@ -1,5 +1,5 @@
 .menu {
-
+  margin-top: 30px;
 
   @include media(">=desktop") {
 
@@ -19,22 +19,11 @@
     }
   }
 
-  &__list {
-    margin-top: 20px;
-    text-align: center;
-
-    @include media(">=desktop") {
-      align-items: center;
-      display: flex;
-      justify-content: flex-end;
-      margin-top: 0;
-    }
-  }
-
   &__link {
-    color: color(yellow, buttercup);
+    color: color(mono, white);
     display: block;
-    letter-spacing: ls(150, 16);
+    font-family: $font-title;
+    font-weight: fw("bold");
 
     @include media(">=desktop") {
       color: color(mono, white);
@@ -54,9 +43,10 @@
   }
 
   &__item {
-    font-size: 16px;
-    margin-bottom: 15px;
+    font-size: 18px;
+    margin-bottom: 30px;
     position: relative;
+    text-align: center;
 
     &:hover {
       .menu__link {

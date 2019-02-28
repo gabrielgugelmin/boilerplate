@@ -1,15 +1,37 @@
 .banner {
   position: relative;
+
   &__item {
-    background-size: cover;
+    align-items: center;
     background-position: center;
     background-repeat: no-repeat;
+    background-size: cover;
+    display: flex !important;
     height: 415px;
+    justify-content: center;
+    text-align: center;
+    padding: 30px;
   }
 
-  &__img {}
+  &__img {
+    img {
+      display: block;
+      margin: 0 auto;
+    }
+  }
 
-  &__title {}
+  &__title {
+    color: color(mono, white);
+    font-size: 30px;
+    font-weight: fw("bold");
+    line-height: 1;
+    margin-bottom: 30px;
+    margin-top: 5px;
+
+    @include media(">=desktop") {
+      font-size: 40px;
+    }
+  }
 
   &__shape {
     position: absolute;
